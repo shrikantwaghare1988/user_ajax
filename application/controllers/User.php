@@ -256,18 +256,21 @@ class User extends CI_Controller {
         echo "Total ".$c." Deleted Successfully";
 
     }
-	public function getDatatableAjax(){
-			
+	public function getDatatableAjax()
+    {	
+        //pre($_POST);die;		
 		
         $total_all_rows = $this->um->getRowCount();
         //echo $total_all_rows;die;
         $columns = array(
-            0 => 'full_name',
-            1 => 'mobile_no',
-            2 => 'email',
-            3 => 'birth_date',
-            //4 => 'city_name',
-            //5 => 'city_state',
+            1 => 'u.id',
+            2 => 'full_name',
+            3 => 'mobile_no',
+            4 => 'email',
+            5 => 'country',
+            6 => 'state',
+            7 => 'city',
+            8 => 'created_date',
         );
         $where = "WHERE 1=1 ";
 
@@ -312,6 +315,8 @@ class User extends CI_Controller {
         }  
        
         //--------------------------------------
+
+        //pre($_POST['order']);die;
 
         $order_clause = "order by ";
         if(isset($_POST['order']))

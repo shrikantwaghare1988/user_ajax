@@ -84,6 +84,13 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js" ></script>
+
+    <script src="https://cdn.datatables.net/buttons/2.0.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.print.min.js"></script>
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>      
     </script>
@@ -96,22 +103,23 @@
 
         //-------Datatable jquery configuration------
 
-       var table = $('#example').DataTable({
+       var table = $('#example1').DataTable({
           "fnCreatedRow": function(nRow, aData, iDataIndex) {
             $(nRow).attr('id', aData[0]);
           },
           "aLengthMenu": [ [5, 10, 20, -1], [5, 10, 20, "All"] ],
+          'pageLength': '10',
           'serverSide': 'true',
           'processing': 'true',
-          //'paging': 'true',
-          //"pagingType": "full_numbers",
+          'paging': 'true',
+          "pagingType": "full_numbers",
           "ordering": false,
           //'orderCellsTop': 'true',
           'fixedHeader': 'true',
           'searching': 'true',                           
           'order': [],
-          dom: 'Bfrtip',
-          buttons: ['copy', 'csv', 'excel', 'pdf', 'print'],
+          'dom': 'Bfrtip',
+          'buttons': ['copy', 'csv', 'excel', 'pdf', 'print'],
           'ajax': {
             'url': '<?php echo base_url(); ?>User/getDatatableAjax',
             'type': 'post',           
@@ -122,6 +130,46 @@
          } ,
                        
        }); 
+
+
+
+       ///-------------------------------
+
+       var table = $('#example').DataTable({         
+              
+           dom: 'Blfrtip',
+           'buttons': ['copy', 'csv', 'excel', 'pdf', 'print'],             
+           'serverSide': 'true',
+           'lengthMenu': [[5, 10, 25, 100, 200, 500, -1], [5, 10, 25, 100, 200, 500, "All"]],
+           'pageLength': 5,
+           'processing': 'true',
+           'paging': 'true',
+           "ordering": true,
+           //'orderCellsTop': 'true',
+           //'fixedHeader': 'true',
+           'searching': 'true',
+           'order': [[1, 'desc']],
+           rowReorder: true,
+          columnDefs: [
+
+              { orderable: true, className: 'reorder', targets: 1 },
+              { orderable: true, className: 'reorder', targets: 2 },
+              { orderable: false, className: 'reorder', targets: 3 },
+              { orderable: true, className: 'reorder', targets: 4 },
+              { orderable: true, className: 'reorder', targets: 5 },
+              { orderable: true, className: 'reorder', targets: 6 },
+              { orderable: true, className: 'reorder', targets: 7 },
+              { orderable: true, className: 'reorder', targets: 8 },
+              { orderable: false, targets: '_all' }
+          ],
+           'ajax': {
+             'url': '<?php echo base_url(); ?>User/getDatatableAjax',
+             'type': 'post',
+             "data": function (d) {
+              //d.search_name = $('#search_name').val();                     	
+            }
+          },               
+        });
        
        //-----Delete single button click-----
        
@@ -258,6 +306,5 @@
 
       } );   //------document ready close here-----
     </script>
-
   </body>
   </html>
