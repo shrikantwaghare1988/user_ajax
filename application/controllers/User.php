@@ -431,4 +431,8 @@ class User extends CI_Controller {
 		$this->db->insert('user', $data);
         echo "Saved";
     }
+    public function test3()
+    {
+        echo base_url();
+    }
 }
