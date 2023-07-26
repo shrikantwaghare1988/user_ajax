@@ -46,16 +46,17 @@ class Php_excel extends CI_Controller {
 	}
 	public function test3()
 	{
-		//pre(APPPATH);die;
-		require_once APPPATH."/third_party/PhpSpreadsheet/Spreadsheet.php";
-		require_once APPPATH."/third_party/PhpSpreadsheet/Writer/Xlsx.php";
+		$this->load->library('excel');
 
-		$spreadsheet = new Spreadsheet();
-		$activeWorksheet = $spreadsheet->getActiveSheet();
-		$activeWorksheet->setCellValue('A1', 'Hello World !');
+		$xl_obj = new PHPExcel();
+		$reader = PHPExcel_IOFactory::createReader('Excel2007');
+		$reader->setReadDataOnly(true);
+		$excel = $reader->load(FCPATH.'upload/excel_file/test.xlsx');
+        //echo "All is fine";
 
-		$writer = new Xlsx($spreadsheet);
-		$writer->save('hello world.xlsx');
+		$sheet = $excel->getActiveSheet()->toArray(null,true,true,true);
+		//pre($excel->getActiveSheet());die;
+		pre($sheet);die;
 
 	}
 }
