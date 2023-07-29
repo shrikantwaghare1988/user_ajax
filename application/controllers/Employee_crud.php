@@ -36,7 +36,10 @@ class Employee_crud extends CI_Controller {
 		//pre($data);die;
 
 		$this->form_validation->set_rules('full_name', 'Full Name', 'required');
-		$this->form_validation->set_rules('description', 'Description', 'required');
+		$this->form_validation->set_rules('email', 'Email', 'required|valid_email|is_unique[emp_crud.email]');
+		$this->form_validation->set_rules('mobile_no', 'Mobile No', 'required');
+		$this->form_validation->set_rules('city', 'City', 'required');
+		//$this->form_validation->set_rules('description', 'Description', 'required');
 	
 		if (!$this->form_validation->run())
 		{
