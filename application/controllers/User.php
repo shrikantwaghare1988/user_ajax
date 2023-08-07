@@ -257,9 +257,9 @@ class User extends CI_Controller {
 
     }
 	public function getDatatableAjax()
-    {	
-        //pre($_POST);die;		
-		
+    {   
+        //pre($_POST);die;      
+        
         $total_all_rows = $this->um->getRowCount();
         //echo $total_all_rows;die;
         $columns = array(
@@ -286,9 +286,8 @@ class User extends CI_Controller {
             $where .= " OR state like '%".$search_value."%'";
             $where .= " OR city like '%".$search_value."%'";
 
-            //$where .= " OR birth_date like '%".date('Y-m-d',strtotime($search_value))."%'";          
-            $args['where'] = $where;
-        	}
+            //$where .= " OR birth_date like '%".date('Y-m-d',strtotime($search_value))."%'"; 
+            }
         }
 
         //--------------------------------------
@@ -322,25 +321,28 @@ class User extends CI_Controller {
         if(isset($_POST['order']))
         {
             $column_name = $_POST['order'][0]['column'];
-            $order = $_POST['order'][0]['dir'];            
-            $args['sorting'] = " ".$columns[$column_name]." ".$order." ";
+            $order = $_POST['order'][0]['dir']; 
             $order_clause .= " ".$columns[$column_name]." ".$order." ";
         }
         else
-        {           
-            $args['sorting'] = "id asc";
+        { 
             $order_clause .= "u.id desc";
         }
 
         if($_POST['length'] != -1)
         {
             $start = $_POST['start'];
-            $length = $_POST['length'];
-            $args['limit'] = $length;
-            $args['offset'] = $start;
+            $length = $_POST['length'];            
             $limit = $length;
             $offset = $start;
-        }       
+        }
+
+
+        $sql_filter_count = "select count(*) as allcount from user u left join location l on l.id=u.loc_id ".$where;
+
+        $filter_result = $this->db->query($sql_filter_count)->result_array();
+        $totalRecordwithFilter = $filter_result[0]['allcount'];
+
 
         $sql = "select u.*,l.* ,u.id as user_id from user u left join location l on l.id=u.loc_id ".$where." ".$order_clause." limit ".$limit." OFFSET ".$offset;
         
@@ -393,8 +395,8 @@ class User extends CI_Controller {
 
         $output = array(
             'draw'=> intval($_POST['draw']),
-            'iTotalRecords' =>intval(count($data)) ,
-            'iTotalDisplayRecords'=> intval($total_all_rows),
+            'iTotalRecords' =>$total_all_rows,
+            'iTotalDisplayRecords'=> $totalRecordwithFilter,
             'data'=>$data,
             'sql' => $sql,
         );
@@ -410,8 +412,8 @@ class User extends CI_Controller {
                 'sql' => $sql,
             );
             echo  json_encode($output);
-        }	
-	}
+        }   
+    }
     public function test()
     {
         unlink("upload/profile_pic/test.jpg");

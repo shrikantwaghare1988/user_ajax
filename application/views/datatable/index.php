@@ -16,43 +16,14 @@
     <title>User Data</title>
   </head>
   <body>
-
    
 
     <div class="container-fluid">
-      <h2 class="text-center">User Data </h2> 
+      <h2 class="text-center">User Data</h2>       
       
-      <div class="row">
-        <div class="container">       
-          <div class="row">
-                <div class="col-md-12">                     
-                  <a href="<?php echo base_url()?>/User/new_user" class="btn btn-primary ">New</a>
-                  <button  class="btn btn-danger deleteMultiplebtn">Delete</button>
-                </div>   
-          </div>
-        </div>
-      </div>
       <br>
 
-      <div class="row">
-        <div class="container">       
-          <div class="row">           
-            <div class="col-md-12 card" style="padding: 20px;">
-              <form class="row g-3">             
-                <div class="col-md-4">
-                  <label for="inputState" class="form-label">Created Date</label>
-                  <input type="text" autocomplete="off" class="form-control" id="daterange" name="daterange" value="" placeholder="Select date" />
-                </div>
-                <div class="col-md-12">                     
-                  <button id="search" class="btn btn-primary ">Search</button>
-                  <button id="reset" class="btn btn-primary ">Reset</button>
-                </div>
-              </form>
-            </div>
-            
-          </div>
-        </div>
-      </div>
+     
       <br>
       <div class="row">
         <div class="container">       
@@ -61,18 +32,16 @@
               <input type="hidden" id="ids">
               <table id="example" class="table">
                 <thead>
-                <th></th>
-                <th>ID</th>
-                  <th>Name</th>
-                  <th>Mobile No</th>
-                  <th>Email</th>
-                  <th>Country</th>
-                  <th>State</th>
-                  <th>City</th>
-                  <th>Created date</th>
-                  <th>Pic</th> 
-                  <th>Action</th>                 
-                </thead>
+                 <tr>
+                   <th>User ID</th>
+                   <th>Username</th>
+                   <th>First Name</th>
+                   <th>Last Name</th>
+                   <th>City</th>
+                   <th>Department</th>
+                   <th>Gender</th>
+                 </tr>
+               </thead>
                 <tbody>
                 </tbody>
               </table>
@@ -104,33 +73,64 @@
         //-------Datatable jquery configuration------
 
        var table = $('#example').DataTable({
-          "fnCreatedRow": function(nRow, aData, iDataIndex) {
-            $(nRow).attr('id', aData[0]);
-          },
-          "aLengthMenu": [ [5, 10, 20, -1], [5, 10, 20, "All"] ],
-          'pageLength': '10',
-          'serverSide': 'true',
-          'processing': 'true',
-          'paging': 'true',
-          "pagingType": "full_numbers",
-          "ordering": false,
-          //'orderCellsTop': 'true',
-          'fixedHeader': 'true',
-          'searching': 'true',                           
-          'order': [],
-          'dom': 'Bfrtip',
-          'buttons': ['copy', 'csv', 'excel', 'pdf', 'print'],
+
+           'processing': true,
+          'serverSide': true,
+          'serverMethod': 'post',
           'ajax': {
-            'url': '<?php echo base_url(); ?>User/getDatatableAjax',
-            'type': 'post',           
-            "data": function (d) {       
-             d.daterange = $('#daterange').val();
-             d.ids = $('#ids').val();               
-           }
-         } ,
+             'url':'<?=base_url('Datatable/emplist')?>'
+          },
+          'columns': [
+             { data: 'user_id' },
+             { data: 'username' },
+             { data: 'first_name' },
+             { data: 'last_name' },
+             { data: 'city' },
+             { data: 'department' },
+             { data: 'gender' },
+          ]
                        
        }); 
-      
+
+
+
+       ///-------------------------------
+
+       var table = $('#example444').DataTable({         
+              
+           dom: 'Blfrtip',
+           'buttons': ['copy', 'csv', 'excel', 'pdf', 'print'],             
+           'serverSide': 'true',
+           'lengthMenu': [[5, 10, 25, 100, 200, 500, -1], [5, 10, 25, 100, 200, 500, "All"]],
+           'pageLength': 5,
+           'processing': 'true',
+           'paging': 'true',
+           "ordering": true,
+           //'orderCellsTop': 'true',
+           //'fixedHeader': 'true',
+           'searching': 'true',
+           'order': [[1, 'desc']],
+           rowReorder: true,
+          columnDefs: [
+
+              { orderable: true, className: 'reorder', targets: 1 },
+              { orderable: true, className: 'reorder', targets: 2 },
+              { orderable: false, className: 'reorder', targets: 3 },
+              { orderable: true, className: 'reorder', targets: 4 },
+              { orderable: true, className: 'reorder', targets: 5 },
+              { orderable: true, className: 'reorder', targets: 6 },
+              { orderable: true, className: 'reorder', targets: 7 },
+              { orderable: true, className: 'reorder', targets: 8 },
+              { orderable: false, targets: '_all' }
+          ],
+           'ajax': {
+             'url': '<?php echo base_url(); ?>User/getDatatableAjax',
+             'type': 'post',
+             "data": function (d) {
+              //d.search_name = $('#search_name').val();                      
+            }
+          },               
+        });
        
        //-----Delete single button click-----
        
